@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 245172899141541370}
   - component: {fileID: 245172899141541369}
   - component: {fileID: 245172899141541365}
+  - component: {fileID: 5835309363753027272}
   m_Layer: 6
   m_Name: duckTest
   m_TagString: Untagged
@@ -146,3 +147,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5835309363753027272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245172899141541368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e3623a505a7af47b1c073bfafe683b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duckPoints: 500

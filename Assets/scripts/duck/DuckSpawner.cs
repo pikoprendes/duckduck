@@ -8,9 +8,13 @@ public class DuckSpawner : MonoBehaviour
     public Transform[] spawnPositions;
     public bool duckInScene = false;
 
+    //public RoundSign.states currentState;
 
+    private void Start()
+    {
+    }
 
-    void Update()
+    private void Update()
     {
         if (!duckInScene)
         {

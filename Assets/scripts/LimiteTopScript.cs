@@ -11,17 +11,8 @@ public class LimiteTopScript : MonoBehaviour
         if (Utils.IsInLayerMask(collision.gameObject, playerMask))
         {
             MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
-            if (moveDuck.verSpeed > 0)
-            {
-                moveDuck.verSpeed = -moveDuck.verSpeed;
-                moveDuck.horSpeed = Random.Range(-3, 3);
-            }
-            else
-            {
-                moveDuck.verSpeed *= -1;
-                moveDuck.horSpeed = Random.Range(-3, 3);
-            }
-                
+            moveDuck.verSpeed *= -1;
+            moveDuck.horSpeed = Random.Range(-3, 3);
         }
     }
 }

@@ -4,32 +4,56 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
-    public int ronda = 1;
-    public int score = 0;
-    public int contadorHit = 0;
-    public int hit = 0;
+    public int ronda;
+    public int rondaSet = 1;
+    public int score;
+    public int scoreSet = 0;
+    public int duckCounter; //cuenta los patos totales
+    public int duckCounterSet = 0;
+    public int hit; //cuenta los patos que se han abatido
+    public int hitSet = 0;
+    public Transform[] redDucks;
+    public Transform[] whiteDucks;
 
-    void Start()
+    private void Start()
     {
-        ronda = 1;
-        score = 0;
-        hit = 0;
-        contadorHit = 0;
-}
+        ronda = rondaSet;
+        score = scoreSet;
+        hit = hitSet;
+        duckCounter = duckCounterSet;
+    }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (contadorHit == 9)
+        if (duckCounter == 10)
         {
-            hit = 0;
-            contadorHit = 0;
-            ronda++;
+            NextRound();
         }
     }
 
     public void MissedTarget()
     {
-        contadorHit++;
+        duckCounter++; //no hemoss abatido el pato pero sube el contador de patos
+    }
+
+    public void NextRound()
+    {
+        hit = hitSet;
+        duckCounter = duckCounterSet;
+        ResetRedDucks();
+        ronda++;
+    }
+
+    public void ShowRedDuck(int contadorHit) //muestra el pato rojo si hemos alcanzado al pato en el lugar que corresponde
+    {
+        redDucks[contadorHit].gameObject.SetActive(true);
+    }
+
+    public void ResetRedDucks() //oculta todos los patos rojos al acabar cada ronda
+    {
+        for (int i = 0; i < redDucks.Length; i++)
+        {
+            redDucks[i].gameObject.SetActive(false);
+        }
     }
 }

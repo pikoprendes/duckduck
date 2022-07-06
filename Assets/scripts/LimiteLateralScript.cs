@@ -11,11 +11,7 @@ public class LimiteLateralScript : MonoBehaviour
         if (Utils.IsInLayerMask(collision.gameObject, playerMask))
         {
             MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
-            if (moveDuck.horSpeed > 0)
-                moveDuck.horSpeed = -moveDuck.horSpeed;
-            else
-                moveDuck.horSpeed *= -1;
+            moveDuck.horSpeed *= -1;
         }
     }
-
 }

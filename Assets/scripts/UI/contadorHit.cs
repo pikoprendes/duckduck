@@ -7,14 +7,13 @@ public class contadorHit : MonoBehaviour
 {
     public Manager managerPartida;
 
-    void Start()
+    private void Start()
     {
-        transform.GetComponent<Text>().text = managerPartida.contadorHit.ToString();
+        transform.GetComponent<Text>().text = managerPartida.duckCounter.ToString();
     }
 
-    
-    void Update()
+    private void Update()
     {
-        transform.GetComponent<Text>().text = managerPartida.contadorHit.ToString();
+        transform.GetComponent<Text>().text = managerPartida.duckCounter.ToString();
     }
 }
