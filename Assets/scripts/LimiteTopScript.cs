@@ -12,7 +12,6 @@ public class LimiteTopScript : MonoBehaviour
         {
             MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
             moveDuck.verSpeed *= -1;
-            moveDuck.horSpeed = Random.Range(-3, 3);
         }
     }
 }

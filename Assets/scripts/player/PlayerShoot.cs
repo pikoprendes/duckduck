@@ -13,13 +13,14 @@ public class PlayerShoot : MonoBehaviour
 
     private void Start()
     {
-        balas = balasSet;
+        BalasReset();
+        canIShoot = false;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && canIShoot)
         {
             if (balas > 0)
             {
@@ -29,9 +30,10 @@ public class PlayerShoot : MonoBehaviour
             }
             else
             {
+                DuckEraser();//deactivamos el pato activo en la escena
                 managerPartida.MissedTarget(); //le comunicamos al manager que hemos fallado los tres disparos
-                BalasSpritesActiveAll(balasSet); //volvemos a mostrar todas las balas
-                balas = balasSet; //reseteamos las balas que tiene disponible el jugador
+                BalasSpritesActiveAll(balasSet); //volvemos a mostrar todos los sprites de las balas
+                BalasReset(); //reseteamos las balas que tiene disponible el jugador
                 //pasar de ronda fly away en el manager que sube contador hit
             }
         }
@@ -46,15 +48,13 @@ public class PlayerShoot : MonoBehaviour
 
         if (hit.collider != null) //si el disparo impacta en un pato (layer duck)
         {
-            hit.collider.gameObject.SetActive(false); //apagamos el pato
-            DuckSpawner duckSpawner = FindObjectOfType<DuckSpawner>();
-            duckSpawner.duckInScene = false; //le decimos al duckSpawner que lance otro pato
+            hit.collider.gameObject.GetComponent<MoveDuck>().DeadDuck();
             managerPartida.ShowRedDuck(managerPartida.duckCounter);//mostramos el pato rojo en señal que lo hemos alcanzado
             managerPartida.hit++; //hemos abatido al pato
             managerPartida.duckCounter++; //un pato mas
             DuckPoints DuckPoints = hit.collider.gameObject.GetComponent<DuckPoints>();
             managerPartida.score += DuckPoints.duckPoints; //sumamos a nuestra puntuacion los puntos que da ese pato
-            balas = balasSet; //reseteamos las balas que tiene disponible el jugador
+            BalasReset(); //reseteamos las balas que tiene disponible el jugador
             BalasSpritesActiveAll(balasSet); //reseteamos los sprites de las balas
         }
     }
@@ -70,5 +70,18 @@ public class PlayerShoot : MonoBehaviour
         {
             balasSprites[i].gameObject.SetActive(true);
         }
+    }
+
+    public void DuckEraser() //metodo que borra el pato de la escena si se agotan la balas sin haberlo abatido
+    {
+        MoveDuck moveduck = FindObjectOfType<MoveDuck>();
+        moveduck.transform.gameObject.SetActive(false); //desactivamos el pato que no hemos abatido
+        DuckSpawner duckSpawner = FindObjectOfType<DuckSpawner>();
+        duckSpawner.duckInScene = false; //le decimos al duckSpawner que lance otro pato
+    }
+
+    public void BalasReset()
+    {
+        balas = balasSet;
     }
 }

@@ -14,6 +14,7 @@ public class Manager : MonoBehaviour
     public int hitSet = 0;
     public Transform[] redDucks;
     public Transform[] whiteDucks;
+    public bool changeRound = false;
 
     private void Start()
     {
@@ -21,6 +22,7 @@ public class Manager : MonoBehaviour
         score = scoreSet;
         hit = hitSet;
         duckCounter = duckCounterSet;
+        changeRound = true;
     }
 
     private void Update()
@@ -28,6 +30,7 @@ public class Manager : MonoBehaviour
         if (duckCounter == 10)
         {
             NextRound();
+            changeRound = true;
         }
     }
 
