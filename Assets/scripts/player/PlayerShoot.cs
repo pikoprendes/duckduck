@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerShoot : MonoBehaviour
 {
     public Camera myCamera;
-    public int balasSet = 3; //por si más tarde queremos cambiar el numero de balas del que dispone el jugador
+    public int balasSet = 2; //por si más tarde queremos cambiar el numero de balas del que dispone el jugador
     public int balas;
     public Transform[] balasSprites;
     public Manager managerPartida;
@@ -20,21 +20,23 @@ public class PlayerShoot : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1") && canIShoot)
+        if (Input.GetButtonDown("Fire1") && canIShoot) //si apriento el boton izquiero del raton y puedo disparar
         {
-            if (balas > 0)
+            if (balas > 0)//si me quedan balas significa que aun puedo disparar
             {
                 balas--;
-                BalasSpritesHide(balas); //ocultamos un sprite de bala
+                HideSpriteBala(balas); //ocultamos un sprite de bala
                 shoot();
             }
-            else
+            else //de lo contrario no me quedan balas y ya no podré abatir al pato
             {
-                DuckEraser();//deactivamos el pato activo en la escena
+                //pasar de ronda fly away en el manager que sube contador hit
+                //LA SIGUIENTE FUNCION DEBE SER TEMPORAL HASTA IMPLEMENTAR ANIMACION DE IRSE
+                DuckEraser();//desactivamos el pato activo en la escena
                 managerPartida.MissedTarget(); //le comunicamos al manager que hemos fallado los tres disparos
                 BalasSpritesActiveAll(balasSet); //volvemos a mostrar todos los sprites de las balas
                 BalasReset(); //reseteamos las balas que tiene disponible el jugador
-                //pasar de ronda fly away en el manager que sube contador hit
+                canIShoot = false;
             }
         }
     }
@@ -49,17 +51,16 @@ public class PlayerShoot : MonoBehaviour
         if (hit.collider != null) //si el disparo impacta en un pato (layer duck)
         {
             hit.collider.gameObject.GetComponent<MoveDuck>().DeadDuck();
-            managerPartida.ShowRedDuck(managerPartida.duckCounter);//mostramos el pato rojo en señal que lo hemos alcanzado
-            managerPartida.hit++; //hemos abatido al pato
-            managerPartida.duckCounter++; //un pato mas
+            managerPartida.TargetHit(); //le comunicamos al manager que hemos abatido al pato
             DuckPoints DuckPoints = hit.collider.gameObject.GetComponent<DuckPoints>();
-            managerPartida.score += DuckPoints.duckPoints; //sumamos a nuestra puntuacion los puntos que da ese pato
+            managerPartida.score += DuckPoints.ReturnDuckPoints(); //sumamos a nuestra puntuacion los puntos que da ese pato
             BalasReset(); //reseteamos las balas que tiene disponible el jugador
             BalasSpritesActiveAll(balasSet); //reseteamos los sprites de las balas
+            canIShoot = false;
         }
     }
 
-    public void BalasSpritesHide(int balas) //desactiva un sprite de bala cada disparo
+    public void HideSpriteBala(int balas) //desactiva un sprite de bala cada disparo
     {
         balasSprites[balas].gameObject.SetActive(false);
     }
@@ -72,12 +73,12 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    public void DuckEraser() //metodo que borra el pato de la escena si se agotan la balas sin haberlo abatido
+    public void DuckEraser() //TEMPORAL //metodo que borra el pato de la escena si se agotan la balas sin haberlo abatido
     {
         MoveDuck moveduck = FindObjectOfType<MoveDuck>();
         moveduck.transform.gameObject.SetActive(false); //desactivamos el pato que no hemos abatido
         DuckSpawner duckSpawner = FindObjectOfType<DuckSpawner>();
-        duckSpawner.duckInScene = false; //le decimos al duckSpawner que lance otro pato
+        duckSpawner.duckInScene = false; //le comunicamos al duck spawner que puede lanzar otro pato
     }
 
     public void BalasReset()

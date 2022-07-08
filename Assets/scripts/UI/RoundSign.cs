@@ -12,7 +12,7 @@ public class RoundSign : MonoBehaviour
 
     private void Update()
     {
-        if (manager.changeRound)
+        if (manager.changeRound) //al cambiar de ronda
         {
             manager.changeRound = false;
             StartCoroutine(ShowRoundSign());
@@ -21,11 +21,13 @@ public class RoundSign : MonoBehaviour
 
     public IEnumerator ShowRoundSign()
     {
-        playerShoot.canIShoot = false;
-        duckSpawner.canISpawn = false;
+        playerShoot.canIShoot = false; //le comunicamos al jugador que mo puede disparar
+        duckSpawner.canISpawn = false;//le comunicamos al spawner que no puede spawnear
         ShowChildren();
 
         yield return new WaitForSeconds(timeShowingSign);
+
+        //una vez transcurrido x segundos ya puede comenzar la partida
         playerShoot.canIShoot = true;
         duckSpawner.canISpawn = true;
         manager.changeRound = false;
@@ -33,7 +35,7 @@ public class RoundSign : MonoBehaviour
         HideChildren();
     }
 
-    public void HideChildren()
+    public void HideChildren() //oculta el panel que muestra la ronda en la que estamos
     {
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
@@ -41,7 +43,7 @@ public class RoundSign : MonoBehaviour
         }
     }
 
-    public void ShowChildren()
+    public void ShowChildren() //muestra el panel de la ronda en la que estamos
     {
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {

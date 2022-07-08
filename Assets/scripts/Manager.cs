@@ -39,6 +39,13 @@ public class Manager : MonoBehaviour
         duckCounter++; //no hemoss abatido el pato pero sube el contador de patos
     }
 
+    public void TargetHit()
+    {
+        ShowRedDuck(duckCounter);//mostramos el pato rojo en señal que lo hemos alcanzado
+        hit++; //hemos abatido al pato
+        duckCounter++; //un pato mas
+    }
+
     public void NextRound()
     {
         hit = hitSet;

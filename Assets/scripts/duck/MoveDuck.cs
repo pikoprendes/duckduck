@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class MoveDuck : MonoBehaviour
 {
-    public float verSpeed;
-    public float horSpeed;
+    public float verSpeed = 7;
+    public float verSpeedSave = 7;
+    public float horSpeed = 10;
+    private float horSpeedSave = 10;
 
     private void Start()
     {
-        horSpeed = Random.Range(-10, 10);
-        verSpeed = Random.Range(2, 4);
     }
 
-    // Update is called once per frame
     private void Update()
     {
         DuckMovement();
@@ -37,35 +36,30 @@ public class MoveDuck : MonoBehaviour
         }
     }
 
-    public void DeadDuck()
+    public void DeadDuck() //lanza la animacion del pato muerto y hace que no se mueva
     {
         gameObject.GetComponent<Animator>().SetBool("isDead", true);
         horSpeed = 0;
         verSpeed = 0;
-        gameObject.GetComponent<Collider2D>().enabled = false;
     }
 
-    public void DeactivateDuck()
+    public void DeactivateDuck() //al finalizar la anmiacion de morir desactivamos en pato y le devolvemos la velocidad originial para cuando vuelva a spawnearse
     {
-        gameObject.SetActive(false);
         IsDuckInScene();
-        ResetDuck();
-    }
-
-    public void DeadFallingDuck()
-    {
-        verSpeed = -3;
-    }
-
-    public void ResetDuck()
-    {
         gameObject.GetComponent<Animator>().SetBool("isDead", false);
-        gameObject.GetComponent<Collider2D>().enabled = true;
-        horSpeed = Random.Range(-10, 10);
-        verSpeed = Random.Range(2, 4);
+        gameObject.GetComponent<Rigidbody2D>().simulated = true;
+        horSpeed = horSpeedSave;
+        verSpeed = verSpeedSave;
+        gameObject.SetActive(false);
     }
 
-    public void IsDuckInScene()
+    public void DeadFallingDuck() //se activa durante la animacion
+    {
+        verSpeed = -5.5f;
+        gameObject.GetComponent<Rigidbody2D>().simulated = false;
+    }
+
+    public void IsDuckInScene() //le comunica al spawner que ya no hay un pato en la escena
     {
         DuckSpawner duckSpawner = FindObjectOfType<DuckSpawner>();
         duckSpawner.duckInScene = false; //le decimos al duckSpawner que lance otro pato

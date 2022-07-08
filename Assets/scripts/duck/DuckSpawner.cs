@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class DuckSpawner : MonoBehaviour
 {
+    public PlayerShoot playerShoot;
     public DuckPool myDuckPool;
     public Transform[] spawnPositions;
     public bool duckInScene = false;
     public bool canISpawn = false;
     public int timetoSpawn = 2;
-
-    //public RoundSign.states currentState;
 
     private void Start()
     {
@@ -29,11 +28,12 @@ public class DuckSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(timetoSpawn);
+            yield return new WaitForSeconds(timetoSpawn); //esperamos x segundos para spawnear
             //yield return null;
-            if (canISpawn && !duckInScene)
+            if (canISpawn && !duckInScene) //si puedo spawnear y no hay un pato en la escena lo saco
             {
                 Spawner();
+                playerShoot.canIShoot = true; //le comunicamos al juagdor que ya puede disparar
             }
         }
     }
