@@ -41,6 +41,10 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
+    //private void OnMouseDown()
+    //{
+    //}
+
     public void shoot()
     {
         Ray ray = myCamera.ScreenPointToRay(Input.mousePosition);
