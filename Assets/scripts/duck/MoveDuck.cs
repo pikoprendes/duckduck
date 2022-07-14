@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoveDuck : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class MoveDuck : MonoBehaviour
     public float verSpeedSave = 7;
     public float horSpeed = 10;
     public float horSpeedSave = 10;
+    public Text puntuacionPato;
 
     private void Start()
     {
@@ -41,6 +43,9 @@ public class MoveDuck : MonoBehaviour
         gameObject.GetComponentInChildren<Animator>().SetBool("isDead", true);
         horSpeed = 0;
         verSpeed = 0;
+        puntuacionPato.transform.gameObject.SetActive(true);
+        puntuacionPato.transform.position = gameObject.transform.position;
+        puntuacionPato.text = 1000.ToString();
     }
 
     public void IsDuckInScene() //le comunica al spawner que ya no hay un pato en la escena
