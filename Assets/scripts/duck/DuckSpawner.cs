@@ -14,7 +14,15 @@ public class DuckSpawner : MonoBehaviour
     private void Start()
     {
         canISpawn = false;
-        StartCoroutine(SpawnRoutine());
+    }
+
+    private void Update()
+    {
+        if (canISpawn && !duckInScene)
+        {
+            canISpawn = false;
+            StartCoroutine(SpawnRoutine());
+        }
     }
 
     public void Spawner()
@@ -26,15 +34,9 @@ public class DuckSpawner : MonoBehaviour
 
     public IEnumerator SpawnRoutine()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(timetoSpawn); //esperamos x segundos para spawnear
-            //yield return null;
-            if (canISpawn && !duckInScene) //si puedo spawnear y no hay un pato en la escena lo saco
-            {
-                Spawner();
-                playerShoot.canIShoot = true; //le comunicamos al juagdor que ya puede disparar
-            }
-        }
+        yield return new WaitForSeconds(timetoSpawn); //esperamos x segundos para spawnear
+        Spawner();
+        playerShoot.canIShoot = true; //le comunicamos al juagdor que ya puede disparar
+        canISpawn = true;
     }
 }

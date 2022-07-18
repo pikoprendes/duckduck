@@ -8,6 +8,7 @@ public class MoveDuck : MonoBehaviour
     public float verSpeedSave = 7;
     public float horSpeed = 10;
     private float horSpeedSave = 10;
+    private float verticalFalling = -6.5f;
 
     private void Start()
     {
@@ -55,7 +56,7 @@ public class MoveDuck : MonoBehaviour
 
     public void DeadFallingDuck() //se activa durante la animacion
     {
-        verSpeed = -5.5f;
+        verSpeed = verticalFalling;
         gameObject.GetComponent<Rigidbody2D>().simulated = false;
     }
 
