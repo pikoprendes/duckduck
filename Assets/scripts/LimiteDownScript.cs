@@ -15,6 +15,7 @@ public class LimiteDownScript : MonoBehaviour
             MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
             moveDuck.verSpeed *= -1;
         }
+        Physics2D.IgnoreLayerCollision(0, 7, true);
     }
 
     private void Update()

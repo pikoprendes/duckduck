@@ -44,11 +44,11 @@ public class MoveDuck : MonoBehaviour
         verSpeed = 0;
     }
 
-    public void DeactivateDuck() //al finalizar la anmiacion de morir desactivamos en pato y le devolvemos la velocidad originial para cuando vuelva a spawnearse
+    public void DeactivateDuck() //al finalizar la animacion de morir desactivamos el pato y le devolvemos la velocidad originial para cuando vuelva a spawnearse
     {
         IsDuckInScene();
         gameObject.GetComponent<Animator>().SetBool("isDead", false);
-        gameObject.GetComponent<Rigidbody2D>().simulated = true;
+        //gameObject.GetComponent<Rigidbody2D>().simulated = true;
         horSpeed = horSpeedSave;
         verSpeed = verSpeedSave;
         gameObject.SetActive(false);
@@ -57,7 +57,9 @@ public class MoveDuck : MonoBehaviour
     public void DeadFallingDuck() //se activa durante la animacion
     {
         verSpeed = verticalFalling;
-        gameObject.GetComponent<Rigidbody2D>().simulated = false;
+        //gameObject.GetComponent<Rigidbody2D>().simulated = false;
+        int layerDeadDuck = LayerMask.NameToLayer("deadDuck");
+        gameObject.layer = layerDeadDuck;
     }
 
     public void IsDuckInScene() //le comunica al spawner que ya no hay un pato en la escena
