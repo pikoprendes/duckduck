@@ -10,6 +10,7 @@ public class PlayerShoot : MonoBehaviour
     public Transform[] balasSprites;
     public Manager managerPartida;
     public bool canIShoot = false;
+    private float timeToShoot = 5f; //tiempo del que dispone el jugador para disparar
 
     private void Start()
     {
@@ -32,11 +33,10 @@ public class PlayerShoot : MonoBehaviour
             {
                 //pasar de ronda fly away en el manager que sube contador hit
                 //LA SIGUIENTE FUNCION DEBE SER TEMPORAL HASTA IMPLEMENTAR ANIMACION DE IRSE
-                DuckEraser();//desactivamos el pato activo en la escena
+                DuckEraser();//el pato se escapa
                 managerPartida.MissedTarget(); //le comunicamos al manager que hemos fallado los tres disparos
                 BalasSpritesActiveAll(balasSet); //volvemos a mostrar todos los sprites de las balas
                 BalasReset(); //reseteamos las balas que tiene disponible el jugador
-                canIShoot = false;
             }
         }
     }
@@ -61,6 +61,7 @@ public class PlayerShoot : MonoBehaviour
             BalasReset(); //reseteamos las balas que tiene disponible el jugador
             BalasSpritesActiveAll(balasSet); //reseteamos los sprites de las balas
             canIShoot = false;
+            StopAllCoroutines();
         }
     }
 
@@ -77,16 +78,37 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    public void DuckEraser() //TEMPORAL //metodo que borra el pato de la escena si se agotan la balas sin haberlo abatido
+    public void DuckEraser() //si no matamos al pato o pasan mas de 5 segundos:
     {
+        canIShoot = false;
         MoveDuck moveduck = FindObjectOfType<MoveDuck>();
-        moveduck.transform.gameObject.SetActive(false); //desactivamos el pato que no hemos abatido
+        moveduck.DuckFlyingAway();
         DuckSpawner duckSpawner = FindObjectOfType<DuckSpawner>();
         duckSpawner.duckInScene = false; //le comunicamos al duck spawner que puede lanzar otro pato
+        StopAllCoroutines();
     }
 
     public void BalasReset()
     {
         balas = balasSet;
+    }
+
+    public IEnumerator TimeCounter()
+    {
+        yield return new WaitForSeconds(timeToShoot);
+        DuckEraser();
+        managerPartida.MissedTarget(); //le comunicamos al manager que hemos fallado los tres disparos
+        BalasSpritesActiveAll(balasSet); //volvemos a mostrar todos los sprites de las balas
+        BalasReset(); //reseteamos las balas que tiene disponible el jugador
+    }
+
+    public void TimeCounterFunction()
+    {
+        StartCoroutine(TimeCounter());
+    }
+
+    public void StopAllCoroutineFunction()
+    {
+        StopAllCoroutines();
     }
 }

@@ -7,6 +7,7 @@ public class LimiteDownScript : MonoBehaviour
     public LayerMask playerMask;
     public DuckSpawner duckSpawner;
     private bool positionCollider;
+    private float timeToACtivateCollider = 1f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -18,15 +19,24 @@ public class LimiteDownScript : MonoBehaviour
         Physics2D.IgnoreLayerCollision(0, 7, true);
     }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        //Debug.Log("First point that collided: " + collision.GetContact(1));
+        //MoveDuck moveduck = collision.gameObject.GetComponent<MoveDuck>();
+        //moveduck.DeactivateDuck();
+    }
+
     private void Update()
     {
         if (duckSpawner.duckInScene) //si hay un pato en la escena sube el collider
         {
-            gameObject.GetComponent<Animator>().SetBool("colliderUp", true);
+            //gameObject.GetComponent<Animator>().SetBool("colliderUp", true);
+            StartCoroutine(ActivateColliderCor());
         }
         else //si no hay un pato en la escen y tiene que spawnearse baja el collider para no intereferir con la spwan position
         {
-            gameObject.GetComponent<Animator>().SetBool("colliderUp", false);
+            //gameObject.GetComponent<Animator>().SetBool("colliderUp", false);
+            DeactivateCollider();
         }
     }
 
@@ -38,5 +48,11 @@ public class LimiteDownScript : MonoBehaviour
     public void DeactivateCollider()
     {
         gameObject.GetComponent<Collider2D>().enabled = false;
+    }
+
+    public IEnumerator ActivateColliderCor()
+    {
+        yield return new WaitForSeconds(timeToACtivateCollider);
+        ActivateCollider();
     }
 }

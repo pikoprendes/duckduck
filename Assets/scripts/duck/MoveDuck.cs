@@ -9,15 +9,24 @@ public class MoveDuck : MonoBehaviour
     public float horSpeed = 10;
     private float horSpeedSave = 10;
     private float verticalFalling = -6.5f;
+    private float flyingAwaySpeed = 10f;
+    private GameObject cieloRosa;
 
     private void Start()
     {
+        cieloRosa = GameObject.FindGameObjectWithTag("cieloRosa");
     }
 
     private void Update()
     {
         DuckMovement();
         FlipDuck();
+    }
+
+    private void OnEnable()
+    {
+        int layerDeadDuck = LayerMask.NameToLayer("duck");
+        gameObject.layer = layerDeadDuck;
     }
 
     public void DuckMovement()
@@ -46,8 +55,9 @@ public class MoveDuck : MonoBehaviour
 
     public void DeactivateDuck() //al finalizar la animacion de morir desactivamos el pato y le devolvemos la velocidad originial para cuando vuelva a spawnearse
     {
-        IsDuckInScene();
+        NoDuckInScene();
         gameObject.GetComponent<Animator>().SetBool("isDead", false);
+        gameObject.GetComponent<Animator>().SetBool("hasEscaped", false);
         //gameObject.GetComponent<Rigidbody2D>().simulated = true;
         horSpeed = horSpeedSave;
         verSpeed = verSpeedSave;
@@ -62,9 +72,29 @@ public class MoveDuck : MonoBehaviour
         gameObject.layer = layerDeadDuck;
     }
 
-    public void IsDuckInScene() //le comunica al spawner que ya no hay un pato en la escena
+    public void DuckFlyingAway() //Metodo para cuando no se ha matado al pato o han pasado mas de x segundos
+    {
+        horSpeed = 0;
+        verSpeed = flyingAwaySpeed;
+        gameObject.GetComponent<Animator>().SetBool("hasEscaped", true);
+        int layerFlyingAwayDuck = LayerMask.NameToLayer("flyingAwayDuck");
+        gameObject.layer = layerFlyingAwayDuck;
+    }
+
+    public void NoDuckInScene() //le comunica al spawner que ya no hay un pato en la escena
     {
         DuckSpawner duckSpawner = FindObjectOfType<DuckSpawner>();
         duckSpawner.duckInScene = false; //le decimos al duckSpawner que lance otro pato
     }
+
+    public void EnableCieloRosa()
+    {
+        cieloRosa.GetComponent<SpriteRenderer>().sortingOrder = 1;
+    }
+    public void DisableCieloRosa()
+    {
+        cieloRosa.GetComponent<SpriteRenderer>().sortingOrder = -1;
+    }
+
+
 }

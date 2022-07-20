@@ -36,7 +36,9 @@ public class DuckSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(timetoSpawn); //esperamos x segundos para spawnear
         Spawner();
-        playerShoot.canIShoot = true; //le comunicamos al juagdor que ya puede disparar
+        playerShoot.canIShoot = true; //le comunicamos al jugador que ya puede disparar
+        playerShoot.StopAllCoroutineFunction();
+        playerShoot.TimeCounterFunction();
         canISpawn = true;
     }
 }
