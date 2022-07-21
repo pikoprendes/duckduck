@@ -8,12 +8,14 @@ public class RoundSign : MonoBehaviour
     public PlayerShoot playerShoot;
     public DuckSpawner duckSpawner;
     public Manager manager;
-    public float timeShowingSign = 3;
+    public float timeShowingSign = 7;
+    public Animator dog1;
 
     private void Update()
     {
         if (manager.changeRound) //al cambiar de ronda
         {
+            StopAllCoroutines();
             manager.changeRound = false;
             StartCoroutine(ShowRoundSign());
         }
@@ -21,16 +23,15 @@ public class RoundSign : MonoBehaviour
 
     public IEnumerator ShowRoundSign()
     {
-        playerShoot.canIShoot = false; //le comunicamos al jugador que mo puede disparar
+        playerShoot.canIShoot = false; //le comunicamos al jugador que no puede disparar
         duckSpawner.canISpawn = false;//le comunicamos al spawner que no puede spawnear
         ShowChildren();
-
+        dog1.transform.gameObject.SetActive(true);
         yield return new WaitForSeconds(timeShowingSign);
-
+        dog1.transform.gameObject.SetActive(false);
         //una vez transcurrido x segundos ya puede comenzar la partida
         playerShoot.canIShoot = true;
         duckSpawner.canISpawn = true;
-        manager.changeRound = false;
 
         HideChildren();
     }

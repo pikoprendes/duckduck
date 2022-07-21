@@ -23,7 +23,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && canIShoot) //si apriento el boton izquiero del raton y puedo disparar
         {
-            if (balas > 0)//si me quedan balas significa que aun puedo disparar
+            if (balas >= 1)//si me quedan balas significa que aun puedo disparar
             {
                 balas--;
                 HideSpriteBala(balas); //ocultamos un sprite de bala

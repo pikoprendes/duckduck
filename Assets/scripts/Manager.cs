@@ -15,6 +15,8 @@ public class Manager : MonoBehaviour
     public Transform[] redDucks;
     public Transform[] whiteDucks;
     public bool changeRound = false;
+    private PlayerShoot player;
+    private DuckSpawner duckSpawner;
 
     private void Start()
     {
@@ -23,6 +25,8 @@ public class Manager : MonoBehaviour
         hit = hitSet;
         duckCounter = duckCounterSet;
         changeRound = true;
+        player = FindObjectOfType<PlayerShoot>();
+        duckSpawner = FindObjectOfType<DuckSpawner>();
     }
 
     private void Update()
@@ -30,6 +34,7 @@ public class Manager : MonoBehaviour
         if (duckCounter == 10)
         {
             NextRound();
+            //corrutina que parpadee los sprites y saque depsues el round sign
             changeRound = true;
         }
     }
@@ -48,10 +53,14 @@ public class Manager : MonoBehaviour
 
     public void NextRound()
     {
-        hit = hitSet;
-        duckCounter = duckCounterSet;
+        player.canIShoot = false; //le comunicamos al jugador que no puede disparar
+        duckSpawner.canISpawn = false;
         ResetRedDucks();
-        ronda++;
+        StartCoroutine(BlinkinRedDucksCor());
+        //hit = hitSet; //cambiar
+        //duckCounter = duckCounterSet; //cambiar
+        //ResetRedDucks(); //cambiar
+        //ronda++;
     }
 
     public void ShowRedDuck(int contadorHit) //muestra el pato rojo si hemos alcanzado al pato en el lugar que corresponde
@@ -62,6 +71,34 @@ public class Manager : MonoBehaviour
     public void ResetRedDucks() //oculta todos los patos rojos al acabar cada ronda
     {
         for (int i = 0; i < redDucks.Length; i++)
+        {
+            redDucks[i].gameObject.SetActive(false);
+        }
+    }
+
+    public IEnumerator BlinkinRedDucksCor()
+    {
+        float elapsedTime = 0;
+        while (elapsedTime > 5)
+        {
+            elapsedTime += Time.deltaTime;
+            ActivateBlinkinRedDucks();
+            yield return new WaitForSeconds(0.5f);
+            DeactivateBlinkinRedDucks();
+        }
+    }
+
+    public void ActivateBlinkinRedDucks() //metodo para final de ronda que hace parpadear los sprites rojos del pato
+    {
+        for (int i = 0; i < hit; i++)
+        {
+            redDucks[i].gameObject.SetActive(true);
+        }
+    }
+
+    public void DeactivateBlinkinRedDucks() //metodo para final de ronda que hace parpadear los sprites rojos del pato
+    {
+        for (int i = 0; i < hit; i++)
         {
             redDucks[i].gameObject.SetActive(false);
         }

@@ -7,16 +7,16 @@ public class LimiteDownScript : MonoBehaviour
     public LayerMask playerMask;
     public DuckSpawner duckSpawner;
     private bool positionCollider;
-    private float timeToACtivateCollider = 1f;
+    private float timeToActivateCollider = 1f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Physics2D.IgnoreLayerCollision(0, 7, true);
         if (Utils.IsInLayerMask(collision.gameObject, playerMask))
         {
             MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
             moveDuck.verSpeed *= -1;
         }
-        Physics2D.IgnoreLayerCollision(0, 7, true);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -33,7 +33,7 @@ public class LimiteDownScript : MonoBehaviour
             //gameObject.GetComponent<Animator>().SetBool("colliderUp", true);
             StartCoroutine(ActivateColliderCor());
         }
-        else //si no hay un pato en la escen y tiene que spawnearse baja el collider para no intereferir con la spwan position
+        else //si no hay un pato en la escena y tiene que spawnearse baja el collider para no intereferir con la spwan position
         {
             //gameObject.GetComponent<Animator>().SetBool("colliderUp", false);
             DeactivateCollider();
@@ -52,7 +52,7 @@ public class LimiteDownScript : MonoBehaviour
 
     public IEnumerator ActivateColliderCor()
     {
-        yield return new WaitForSeconds(timeToACtivateCollider);
+        yield return new WaitForSeconds(timeToActivateCollider);
         ActivateCollider();
     }
 }

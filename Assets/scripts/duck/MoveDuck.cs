@@ -74,6 +74,7 @@ public class MoveDuck : MonoBehaviour
 
     public void DuckFlyingAway() //Metodo para cuando no se ha matado al pato o han pasado mas de x segundos
     {
+        //aparece cartel de fly away
         horSpeed = 0;
         verSpeed = flyingAwaySpeed;
         gameObject.GetComponent<Animator>().SetBool("hasEscaped", true);
@@ -91,10 +92,9 @@ public class MoveDuck : MonoBehaviour
     {
         cieloRosa.GetComponent<SpriteRenderer>().sortingOrder = 1;
     }
+
     public void DisableCieloRosa()
     {
         cieloRosa.GetComponent<SpriteRenderer>().sortingOrder = -1;
     }
-
-
 }

@@ -10,8 +10,10 @@ public class ColliderSuelo : MonoBehaviour
     {
         if (Utils.IsInLayerMask(collision.gameObject, playerMask))
         {
-            Debug.Log("First point that collided: " + collision.contacts[0].point);
+            MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
+            moveDuck.DeactivateDuck();
+            DogScript dog2 = FindObjectOfType<DogScript>();
+            dog2.WhereDog2Appear(collision.contacts[0].point); //devuelve el punto de la colision, que es donde aparecera el perro con el pato
         }
-        Physics2D.IgnoreLayerCollision(0, 6, true);
     }
 }

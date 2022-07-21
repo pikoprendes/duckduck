@@ -9,7 +9,7 @@ public class DuckSpawner : MonoBehaviour
     public Transform[] spawnPositions;
     public bool duckInScene = false;
     public bool canISpawn = false;
-    public int timetoSpawn = 2;
+    public float timetoSpawn = 2.5f;
 
     private void Start()
     {
