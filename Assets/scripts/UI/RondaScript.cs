@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class RondaScript : MonoBehaviour
 {
-    public Manager managerPartida;
+    [SerializeField] private Manager managerPartida;
     
     void Start()
     {

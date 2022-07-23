@@ -5,8 +5,8 @@ using UnityEngine;
 public class DuckPool : MonoBehaviour
 {
 
-    public GameObject duckPrefab;
-    public int poolSize = 3;
+    [SerializeField] private GameObject duckPrefab;
+    [SerializeField] private int poolSize = 3;
 
     private Queue<GameObject> objectQueue;
     

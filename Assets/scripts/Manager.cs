@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
-    public int ronda;
-    public int rondaSet = 1;
-    public int score;
-    public int scoreSet = 0;
-    public int duckCounter; //cuenta los patos totales
-    public int duckCounterSet = 0;
-    public int hit; //cuenta los patos que se han abatido
-    public int hitSet = 0;
-    public Transform[] redDucks;
-    public Transform[] whiteDucks;
-    public bool changeRound = false;
+    [SerializeField] public int ronda;
+    [SerializeField] public int rondaSet = 1;
+    [SerializeField] public int score;
+    [SerializeField] public int scoreSet = 0;
+    [SerializeField] public int duckCounter; //contador patos
+    [SerializeField] public int duckCounterSet = 0;
+    [SerializeField] public int hit; //cuenta los patos que se han abatido
+    [SerializeField] public int hitSet = 0;
+    [SerializeField] private Transform[] redDucks;
+    [SerializeField] private Transform[] whiteDucks;
     private PlayerShoot player;
     private DuckSpawner duckSpawner;
+    private RoundSign roundSign;
+    [SerializeField] private float timeBetweenRounds = 7;
+    [SerializeField] private float timeBeforeShowingDog = 5;
+    [SerializeField] private Animator dog1;
+    public bool isDuck10 = false;
 
     private void Start()
     {
@@ -24,18 +29,19 @@ public class Manager : MonoBehaviour
         score = scoreSet;
         hit = hitSet;
         duckCounter = duckCounterSet;
-        changeRound = true;
         player = FindObjectOfType<PlayerShoot>();
         duckSpawner = FindObjectOfType<DuckSpawner>();
+        roundSign = FindObjectOfType<RoundSign>();
+        StartCoroutine(ChangeRound());
     }
 
     private void Update()
     {
         if (duckCounter == 10)
         {
+            isDuck10 = true;
+            duckCounter = duckCounterSet;
             NextRound();
-            //corrutina que parpadee los sprites y saque depsues el round sign
-            changeRound = true;
         }
     }
 
@@ -51,16 +57,19 @@ public class Manager : MonoBehaviour
         duckCounter++; //un pato mas
     }
 
-    public void NextRound()
+    public void NextRound() //metodo que introduce el cambio de ronda
     {
+        if (ronda == 10)
+        {
+            PlayerPrefs.SetInt("Score", score);
+            StartCoroutine(ChangeScene());
+            
+        }
+        duckSpawner.canISpawn = false; //le comunicamos al spawner que no puede spawnear
         player.canIShoot = false; //le comunicamos al jugador que no puede disparar
-        duckSpawner.canISpawn = false;
-        ResetRedDucks();
-        StartCoroutine(BlinkinRedDucksCor());
-        //hit = hitSet; //cambiar
-        //duckCounter = duckCounterSet; //cambiar
-        //ResetRedDucks(); //cambiar
-        //ronda++;
+        StartCoroutine(ChangeRound()); //corrutina que muestra el cartel y el perro
+        StartCoroutine(NewRound());//funcion que resetea los sprites de los patos y el contador
+        //NewRound(); //funcion que resetea los sprites de los patos y el contador
     }
 
     public void ShowRedDuck(int contadorHit) //muestra el pato rojo si hemos alcanzado al pato en el lugar que corresponde
@@ -76,17 +85,6 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public IEnumerator BlinkinRedDucksCor()
-    {
-        float elapsedTime = 0;
-        while (elapsedTime > 5)
-        {
-            elapsedTime += Time.deltaTime;
-            ActivateBlinkinRedDucks();
-            yield return new WaitForSeconds(0.5f);
-            DeactivateBlinkinRedDucks();
-        }
-    }
 
     public void ActivateBlinkinRedDucks() //metodo para final de ronda que hace parpadear los sprites rojos del pato
     {
@@ -96,11 +94,34 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public void DeactivateBlinkinRedDucks() //metodo para final de ronda que hace parpadear los sprites rojos del pato
+
+    public IEnumerator NewRound()
     {
-        for (int i = 0; i < hit; i++)
-        {
-            redDucks[i].gameObject.SetActive(false);
-        }
+        ResetRedDucks();
+        ActivateBlinkinRedDucks();
+        yield return new WaitForSeconds(3);
+        hit = hitSet;
+        ronda++;
     }
+    public IEnumerator ChangeRound() //rutina que muestra al perro y el cartel de ronda
+    {
+        yield return new WaitForSeconds(timeBeforeShowingDog);
+        gameObject.GetComponent<AudioSource>().Play();
+        roundSign.ShowChildren();
+        dog1.transform.gameObject.SetActive(true);
+        yield return new WaitForSeconds(timeBetweenRounds);
+        ResetRedDucks();
+        dog1.transform.gameObject.SetActive(false);
+        player.canIShoot = true;
+        duckSpawner.canISpawn = true;
+        roundSign.HideChildren();
+        isDuck10 = false;
+    }
+
+    public IEnumerator ChangeScene()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(2);
+    }
+
 }

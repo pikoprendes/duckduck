@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class LimiteTopScript : MonoBehaviour
 {
-    public LayerMask duckMask;
+    [SerializeField] private LayerMask duckMask;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (Utils.IsInLayerMask(collision.gameObject, duckMask))
         {
-            MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
-            moveDuck.verSpeed *= -1;
+            DuckPoints duckPoints = collision.gameObject.GetComponent<DuckPoints>();
+            duckPoints.verSpeed *= -1;
         }
         Physics2D.IgnoreLayerCollision(0, 8, true);
     }

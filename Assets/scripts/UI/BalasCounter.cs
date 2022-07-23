@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BalasCounter : MonoBehaviour
 {
-    public PlayerShoot player;
+    [SerializeField] private PlayerShoot player;
 
     void Start()
     {

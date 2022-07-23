@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class LimiteDownScript : MonoBehaviour
 {
-    public LayerMask playerMask;
-    public DuckSpawner duckSpawner;
+    [SerializeField] private LayerMask playerMask;
+    [SerializeField] private DuckSpawner duckSpawner;
     private bool positionCollider;
-    private float timeToActivateCollider = 1f;
+    [SerializeField] private float timeToActivateCollider = 1f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Physics2D.IgnoreLayerCollision(0, 7, true);
         if (Utils.IsInLayerMask(collision.gameObject, playerMask))
         {
-            MoveDuck moveDuck = collision.gameObject.GetComponent<MoveDuck>();
-            moveDuck.verSpeed *= -1;
+            DuckPoints duckPoints = collision.gameObject.GetComponent<DuckPoints>();
+            duckPoints.verSpeed *= -1;
         }
     }
 

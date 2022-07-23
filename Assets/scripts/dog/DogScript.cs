@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class DogScript : MonoBehaviour
 {
-    public Vector3 originalPos;
+    [SerializeField] private Vector3 originalPos;
+    [SerializeField] private float timeBeforeDogAppears = 0.5f;
+    [SerializeField] private AudioSource audioDogUp;
+    [SerializeField] private AudioSource audioDogLaughing;
 
     private void Start()
     {
         originalPos = gameObject.transform.parent.position;
     }
 
-    public void WhereDog2Appear(Vector2 position)
+    public void WhereDog2Appears(Vector2 position)
     {
-        transform.parent.position = new Vector2(position.x, -2.81f);
-        gameObject.GetComponent<Animator>().SetTrigger("huntedDuck");
+        StartCoroutine(DogAppearsCor(position));
     }
 
     public void DogLaughing()
     {
         transform.parent.position = originalPos;
         gameObject.GetComponent<Animator>().SetTrigger("noHuntedDuck");
+        audioDogLaughing.Play();
+    }
+
+    public IEnumerator DogAppearsCor(Vector2 position)
+    {
+        yield return new WaitForSeconds(timeBeforeDogAppears);
+        transform.parent.position = new Vector2(position.x, -2.81f);
+        gameObject.GetComponent<Animator>().SetTrigger("huntedDuck");
+        audioDogUp.Play();
     }
 }

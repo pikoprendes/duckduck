@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class contadorHit : MonoBehaviour
 {
-    public Manager managerPartida;
+    [SerializeField] private Manager managerPartida;
 
     private void Start()
     {
